@@ -2,48 +2,80 @@ import { useState, useEffect } from 'react';
 import { Candidate } from '../interfaces/Candidate.interface';
 
 const SavedCandidates = () => {
- const [savedCandidates, setSavedCandidates] = useState<Candidate[]>([]);
+  const [savedCandidates, setSavedCandidates] = useState<Candidate[]>([]);
 
- useEffect(() => {
-   const saved = localStorage.getItem('savedCandidates');
-   if (saved) {
-     setSavedCandidates(JSON.parse(saved));
-   }
- }, []);
+  useEffect(() => {
+    const saved = localStorage.getItem('savedCandidates');
+    if (saved) {
+      setSavedCandidates(JSON.parse(saved));
+    }
+  }, []);
 
- if (savedCandidates.length === 0) {
-   return <h2>No candidates have been accepted yet</h2>;
- }
+  const handleReject = (candidateId: number) => {
+    const updatedCandidates = savedCandidates.filter(
+      candidate => candidate.id !== candidateId
+    );
+    setSavedCandidates(updatedCandidates);
+    localStorage.setItem('savedCandidates', JSON.stringify(updatedCandidates));
+  };
 
- return (
-   <div className="container mx-auto p-4">
-     <h1 className="text-2xl font-bold mb-4">Potential Candidates</h1>
-     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-       {savedCandidates.map((candidate) => (
-         <div key={candidate.id} className="bg-white shadow-lg rounded-lg p-6">
-           <img 
-             src={candidate.avatar_url}
-             alt={candidate.name}
-             className="w-32 h-32 rounded-full mx-auto"
-           />
-           <h2 className="text-xl font-bold mt-4">{candidate.name}</h2>
-           <p>@{candidate.username}</p>
-           <p>Location: {candidate.location}</p>
-           <p>Email: {candidate.email}</p>
-           <p>Company: {candidate.company}</p>
-           <a 
-             href={candidate.html_url}
-             target="_blank"
-             rel="noopener noreferrer"
-             className="text-blue-500 hover:underline"
-           >
-             GitHub Profile
-           </a>
-         </div>
-       ))}
-     </div>
-   </div>
- );
+  if (savedCandidates.length === 0) {
+    return <h2 className="text-center text-2xl text-white">No candidates have been accepted</h2>;
+  }
+
+  return (
+    <div>
+      <h1 className="text-4xl text-center text-white mb-8">Potential Candidates</h1>
+      <div className="mx-4">
+        <table className="w-full bg-black bg-opacity-70 rounded-lg overflow-hidden">
+          <thead>
+            <tr className="text-left">
+              <th className="p-4">Image</th>
+              <th className="p-4">Name</th>
+              <th className="p-4">Location</th>
+              <th className="p-4">Email</th>
+              <th className="p-4">Company</th>
+              <th className="p-4">Bio</th>
+              <th className="p-4">Reject</th>
+            </tr>
+          </thead>
+          <tbody>
+            {savedCandidates.map((candidate) => (
+              <tr key={candidate.id} className="border-t border-gray-800">
+                <td className="p-4">
+                  <img 
+                    src={candidate.avatar_url} 
+                    alt={candidate.name || 'Profile'} 
+                    className="w-12 h-12 rounded-lg object-cover"
+                  />
+                </td>
+                <td className="p-4">
+                  {candidate.name}
+                  <div className="text-gray-400">({candidate.login})</div>
+                </td>
+                <td className="p-4">{candidate.location || 'Not specified'}</td>
+                <td className="p-4">
+                  <a href={`mailto:${candidate.email}`} className="text-blue-400 hover:underline">
+                    {candidate.email || 'Not provided'}
+                  </a>
+                </td>
+                <td className="p-4">{candidate.company || 'Not specified'}</td>
+                <td className="p-4">{candidate.bio || 'Not provided'}</td>
+                <td className="p-4">
+                  <button
+                    onClick={() => handleReject(candidate.id)}
+                    className="bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-700"
+                  >
+                    -
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 };
 
 export default SavedCandidates;
