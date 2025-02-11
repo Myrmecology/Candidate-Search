@@ -8,7 +8,7 @@ const Nav = () => {
           Home
         </Link>
         <Link to="/SavedCandidates" className="text-white hover:text-gray-300">
-          Potential Candidates
+          {' '}Potential Candidates
         </Link>
       </div>
     </nav>
