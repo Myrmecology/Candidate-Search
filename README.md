@@ -2,8 +2,7 @@
 
 # CANDIDATE SEARCH 
 
-This is a candidate search application that calls the GitHub API and renders data in the browser. With this application you can browse GitHub developers and see their profile on GitHub. This Candidate Search project will be deployed to Render. 
-The Render Live URL: https://candidate-search-des8.onrender.com/
+This is a candidate search application that calls the GitHub API and renders data in the browser. With this application you can browse GitHub developers and see their profile on GitHub. 
 
 ### Features:
 - Search for candidates on GitHub.
